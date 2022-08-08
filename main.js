@@ -1,51 +1,67 @@
 
 var img = "";
 var status = "";
+var objects = [];
 
 function preload(){
 
-img = loadImage('bsd by beloved.jpg');
+img = loadImage('dog_cat.jpg');
 
 }
 
 
 function setup(){
 
-canvas = createCanvas(640, 420);
+canvas = createCanvas(380, 380);
 canvas.center();
+video = createCapture(VIDEO);
+video.size(380, 380);
+video.hide();
 
-objectdetector = ml5.objectDetector('cocossd', modelLoaded);
-document.getElementById("status").innerHTML = "Status: Detecting Objects";
+
+}
+
+function start(){
+
+    objectdetector = ml5.objectDetector('cocossd', modelLoaded);
+    document.getElementById("status").innerHTML = "Status: Detecting Objects";
 
 }
 
 function draw(){
 
-image(img, 0, 0, 640, 420);
-fill("#7300ff");
-text("Atsushi", 45, 55);
-noFill();
-stroke("#7300ff")
-rect(30, 30, 200, 370);
+image(video, 0, 0, 380, 380);
+if(status != ""){
 
-fill("#11ed4b");
-text("Kyouka", 420, 130);
-noFill();
-stroke("#11ed4b");
-rect(400, 110, 200, 300);
+    r = random(255);
+    g = random(255);
+    b = random(255);
 
-fill("#14e0e0");
-text("Dazai >:(", 280, 110);
+    objectdetector.detect(video, gotResult);
+
+for(i = 0; i < objects.length; i++){
+
+document.getElementById("status").innerHTML = "Status: Object(s) Detected";
+document.getElementById("numobjects").innerHTML = "# of objects detected: " + objects.length;
+
+
+fill(r,g,b);
+percent = floor(objects[i].confidence * 100);
+text(objects[i].label + " " + percent + "%", objects[i].x + 15, objects[i].y + 15);
 noFill();
-stroke("#14e0e0");
-rect(270, 100, 100, 300);
+stroke(r,g,b);
+rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
+
+}
+
+}
 
 }
 
 function modelLoaded(){
 console.log("Oneratur!");
 status = true;
-objectdetector.detect(img, gotResult);
+
 
 }
 
@@ -58,5 +74,6 @@ console.log(error);
 }
 
 console.log(results);
+objects = results;
 
 }

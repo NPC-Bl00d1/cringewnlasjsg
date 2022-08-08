@@ -8,7 +8,7 @@ background-color: #524652;
 color:white;
 }
 
-#status
+#status, #numobjects, #start_mod
 {
 font-size: 18px;
 background-color:#d4c5d4;
@@ -26,5 +26,5 @@ canvas{
 box-shadow: 10px 10px 10px gray;
 border-radius: 10px;
 background-color: #524652;
-
+margin-top: 30px;
 }
